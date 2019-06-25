@@ -26,3 +26,7 @@ original_plaintext = 'user=administrator'
 ```
 
 This tool also assumes that the server is using a cookie to store the CBC token in a base64 encoded format. If this is not the case, you might need to tinker with the functions 'encrypt', 'decrypt' and 'test_token' to supply the data in your desired format
+
+Example output:
+
+![](example.gif)

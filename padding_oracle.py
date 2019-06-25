@@ -76,6 +76,8 @@ def determine_nr_of_padding_bytes(block_list):
         if not success:
             print(f"detected number of padding bytes: {block_size - i}")
             return block_size - i
+    print("[-] Failed to determine number of padding bytes in token to decrypt (token is bad or padding oracle is not working)")
+    exit()
 
 def increment_padding_bytes(token, nr_padding_bytes):
     xor_val = nr_padding_bytes ^ (nr_padding_bytes + 1)
@@ -193,6 +195,11 @@ def encrypt_all(plain_token):
     return full_token
 
 def decrypt():
+    bad_payload = b'0'*block_size
+    if test_token(bad_payload):
+        print("[-] Padding oracle indicates valid padding for impossible token. Please make sure you properly specified all required information.")
+        exit()
+
     global original_token
     original_token = original_token.replace("%2B","+")
     original_token = original_token.replace("%3D","=")
@@ -206,6 +213,11 @@ def decrypt():
     print(f"plaintext token: {plaintext_token}")
 
 def encrypt():
+    bad_payload = b'0'*block_size
+    if test_token(bad_payload):
+        print("[-] Padding oracle indicates valid padding for impossible token. Please make sure you properly specified all required information.")
+        exit()
+
     padding_length = block_size - (len(original_plaintext) % block_size)
     plaintext_padding_bytes = bytes([padding_length])*padding_length
     token = original_plaintext.encode() + plaintext_padding_bytes
@@ -232,11 +244,12 @@ def usage():
 
 
 if len(sys.argv) != 2:
+    print("Bad number of arguments!")
     usage()
 else:
-    if sys.argv == "encrypt":
+    if sys.argv[1] == "encrypt":
         encrypt()
-    elif sys.argv == "decrypt":
+    elif sys.argv[1] == "decrypt":
         decrypt()
     else:
         usage()
