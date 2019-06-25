@@ -8,6 +8,8 @@ import sys
 url = 'target URL'
 block_size = 8
 IV = b'0'*block_size
+
+# This tool assumes that the sever expects the token in the form of a cookie. Here you can specify the name of the cookie
 cookie_name = 'auth'
 
 # This tool will look for the following string in the response from the padding oracle
